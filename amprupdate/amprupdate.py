@@ -26,19 +26,19 @@ hamwan_dstaddresses = ["44.24.240.0/20", ]
 hamwan_gateways = ["198.178.136.80", ]
 
 
-def cidr_expand(short):
+def expand_cidr(short):
     ip, mask = short.split("/")
     ip = ip.split(".") + ["0"] * 4
     return "%s/%s" % (".".join(ip[0:4]), mask)
 
 
-def test_cidr_expand():
+def test_expand_cidr():
     tests = [
         ("1.2/24", "1.2.0.0/24"),
         ("1.2.3/24", "1.2.3.0/24"),
     ]
     for short, expanded in tests:
-        assert cidr_expand(short) == expanded
+        assert expand_cidr(short) == expanded
 
 
 def ios2ros_encap(line):
@@ -46,7 +46,7 @@ def ios2ros_encap(line):
         return False
 
     route, addprivate, dstaddress, encap, gateway = line.split(" ")
-    dstaddress = cidr_expand(dstaddress)
+    dstaddress = expand_cidr(dstaddress)
     gateway = gateway.strip()
     if (route, addprivate, encap) != ("route", "addprivate", "encap"):
         raise ValueError("Unknown line format:", line)
