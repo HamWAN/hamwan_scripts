@@ -9,5 +9,6 @@ Usage
 
 	cat encap.txt | ./amprupdate.py [-v] [-n]
 
-`-n` - dry-run. No changes will be made to target router.
-`-v` - verbose mode. Commands to target router will be printed.
+`-n` dry-run. No changes will be made to target router.
+
+`-v` verbose mode. Commands to target router will be printed.
