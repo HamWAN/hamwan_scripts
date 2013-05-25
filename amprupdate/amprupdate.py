@@ -41,7 +41,7 @@ def test_expand_cidr():
         assert expand_cidr(short) == expanded
 
 
-def ios2ros_encap(line):
+def parse_encap(line):
     if line.startswith("#"):
         return False
 
@@ -113,7 +113,7 @@ def export_ros_ipip_interfaces(ssh):
 
 
 def main():
-    encap_routes = filter(None, map(ios2ros_encap, sys.stdin))
+    encap_routes = filter(None, map(parse_encap, sys.stdin))
 
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
