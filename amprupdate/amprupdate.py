@@ -156,7 +156,7 @@ def main():
         if routes_to_add:
             commands.append("# adding new and modified routes")
         for dstaddress, interface in routes_to_add:
-            commands.append("/interface ipip add local-address=" + wan_router_ip +" name=ampr-%s remote-address=%s" % (interface, interface))
+            commands.append("/interface ipip add local-address=" + wan_router_ip + " name=ampr-%s remote-address=%s" % (interface, interface))
             commands.append("/ip route add dst-address=%s gateway=ampr-%s" % (dstaddress, interface))
 
         if "-v" in sys.argv:
