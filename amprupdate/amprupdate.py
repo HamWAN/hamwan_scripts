@@ -161,7 +161,7 @@ def main():
             commands.append("/interface ipip add local-address=%s name=ampr-%s remote-address=%s" % (wan_router_ip, interface, interface))
             commands.append("/ip route add dst-address=%s gateway=ampr-%s" % (dstaddress, interface))
             if disable_nd:
-               commands.append("/ip neighbor discovery set discover=no %s" % (interface))
+               commands.append("/ip neighbor discovery set discover=no ampr-%s" % (interface))
 
         if "-v" in sys.argv:
             print "\n".join(commands)
