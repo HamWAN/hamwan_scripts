@@ -22,7 +22,7 @@ import sys
 edge_router_ip = "198.178.136.80"
 wan_router_ip ="192.178.136.80"
 ssh_port = 22
-username = ""
+username = None
 hamwan_dstaddresses = ["44.24.240.0/20", ]
 hamwan_gateways = ["198.178.136.80", ]
 
@@ -55,8 +55,6 @@ def parse_encap(line):
     if (dstaddress in hamwan_dstaddresses) or (gateway in hamwan_gateways):
         return False
 
-    # return "/ip route add dst-address=%s gateway=ampr-%s" % (
-    #     dstaddress, gateway)
     return (dstaddress, gateway)
 
 
