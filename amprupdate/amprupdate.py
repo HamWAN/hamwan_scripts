@@ -157,6 +157,7 @@ def main():
         for dstaddress, interface in routes_to_add:
             commands.append("/interface ipip add local-address=%s name=ampr-%s remote-address=%s" % (edge_router_ip, interface, interface))
             commands.append("/ip route add dst-address=%s gateway=ampr-%s" % (dstaddress, interface))
+	    commands.append("/ip neighbor discovery set ampr-%s discover=no" % (interface))
 
         if "-v" in sys.argv:
             print "\n".join(commands)
