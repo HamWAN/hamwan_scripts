@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import time
 import paramiko
 import socket
 import sys
@@ -164,6 +165,7 @@ def main():
         if "-n" not in sys.argv:
             for command in commands:
                 ssh.exec_command(command)
+		time.sleep(0.1)
     except socket.timeout:
         print "timeout"
     finally:
