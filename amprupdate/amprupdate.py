@@ -27,6 +27,8 @@ username = None
 hamwan_dstaddresses = ["44.24.240.0/20", ]
 hamwan_gateways = ["198.178.136.80", "209.189.196.68"]
 
+disable_nd = 1
+
 
 def expand_cidr(short):
     ip, mask = short.split("/")
@@ -157,6 +159,8 @@ def main():
         for dstaddress, interface in routes_to_add:
             commands.append("/interface ipip add local-address=%s name=ampr-%s remote-address=%s" % (edge_router_ip, interface, interface))
             commands.append("/ip route add dst-address=%s gateway=ampr-%s" % (dstaddress, interface))
+            if disable_nd:
+               commands.append("/ip neighbor discovery set discover=no ampr-%s" % (interface))
 
         if "-v" in sys.argv:
             print "\n".join(commands)
