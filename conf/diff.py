@@ -46,8 +46,16 @@ def main():
     command = sys.argv.pop()
     hosts = sys.argv[2:]
 
+    processes = []
     for host in hosts:
         ssh = subprocess.Popen(['ssh', host, command], stdout=subprocess.PIPE)
+        processes.append((host, ssh))
+
+    for host, ssh in processes:
+        if ssh.wait() != 0:
+            print host, "failed"
+            continue
+
         reply = filter_comments(ssh.stdout.read().splitlines())
 
         if verify == reply:
