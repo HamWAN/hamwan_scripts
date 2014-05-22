@@ -18,6 +18,11 @@
 from difflib import unified_diff
 import subprocess
 import sys
+import json
+import urllib2
+
+
+INVENTORY_URL = 'http://portal.hamwan.org/host/ansible.json'
 
 
 def filter_comments(l):
@@ -27,10 +32,11 @@ def filter_comments(l):
 def usage():
     print "Usage:", sys.argv[0], "FILE", "HOSTNAMES...", "COMMAND"
     print
-    print "FILE\tCompare output to the contents of this file."
-    print "HOSTNAMES\tHost to query and compare"
-    print "COMMAND\tCommand sent to host. This should match the command used to"
-    print "\tgenerate FILE."
+    print "FILE\t\tCompare output to the contents of this file."
+    print "HOSTNAMES\tHost to query and compare."
+    print "\t\tGroup names from Ansible inventory also work."
+    print "COMMAND\t\tCommand sent to host. This should match the command used to"
+    print "\t\tgenerate FILE."
     print
     print "ROS comments (lines beginning with #), it will be ignored."
     sys.exit()
@@ -44,7 +50,16 @@ def main():
         verify = filter_comments([line.rstrip() for line in f])
 
     command = sys.argv.pop()
+
     hosts = sys.argv[2:]
+    # incorporate ansible inventory json
+    HOSTS = json.load(urllib2.urlopen(INVENTORY_URL))
+    for host in hosts:
+        if host in HOSTS:
+            hosts.remove(host)
+            hosts += HOSTS[host]
+    # remove duplicates
+    hosts = set(hosts)
 
     processes = []
     for host in hosts:
