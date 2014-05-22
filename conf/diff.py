@@ -39,7 +39,6 @@ def parse_hosts(hosts):
     return filter(str, return_hosts)
 
 
-
 def usage():
     print "Usage:", sys.argv[0], "FILE", "HOSTNAMES...", "COMMAND"
     print
@@ -50,6 +49,10 @@ def usage():
     print "\t\tgenerate FILE."
     print
     print "ROS comments (lines beginning with #), it will be ignored."
+    print
+    print "Example:"
+    print "ssh KNOWN_GOOD_HOST \"/system ntp export\" > ntp"
+    print "./diff.py ntp \"HamWAN:&mikrotik\" \"/system ntp export\""
     sys.exit()
 
 
