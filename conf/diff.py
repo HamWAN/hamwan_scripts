@@ -23,6 +23,8 @@ import urllib2
 
 
 INVENTORY_URL = 'http://portal.hamwan.org/host/ansible.json'
+RED = "\033[91m{0}\033[0m"
+GREEN = "\033[92m{0}\033[0m"
 
 
 def filter_comments(l):
@@ -67,14 +69,18 @@ def main():
         processes.append((host, ssh))
 
     for host, ssh in processes:
-        if ssh.wait() != 0:
-            print host, "failed"
+        try:
+            if ssh.wait() != 0:
+                print RED.format("%s failed" % host)
+                continue
+        except KeyboardInterrupt:
+            print RED.format("%s aborted." % host)
             continue
 
         reply = filter_comments(ssh.stdout.read().splitlines())
 
         if verify == reply:
-            print host, "matched"
+            print GREEN.format("%s matched" % host)
         else:
             for line in unified_diff(verify, reply,
                 fromfile=sys.argv[1], tofile=host, lineterm=''):
