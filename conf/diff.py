@@ -18,17 +18,26 @@
 from difflib import unified_diff
 import subprocess
 import sys
-import json
-import urllib2
+from ansible.inventory import Inventory
 
 
-INVENTORY_URL = 'http://portal.hamwan.org/host/ansible.json'
 RED = "\033[91m{0}\033[0m"
 GREEN = "\033[92m{0}\033[0m"
 
 
 def filter_comments(l):
     return filter(lambda x: not x.startswith("#"), l)
+
+
+def parse_hosts(hosts):
+    """Gets list of hosts from Ansible inventory."""
+    inventory = Inventory(host_list='inventory.sh')
+
+    return_hosts = []
+    for host in hosts:
+        return_hosts += inventory.list_hosts(pattern=host) or [host]
+    return filter(str, return_hosts)
+
 
 
 def usage():
@@ -53,15 +62,7 @@ def main():
 
     command = sys.argv.pop()
 
-    hosts = sys.argv[2:]
-    # incorporate ansible inventory json
-    HOSTS = json.load(urllib2.urlopen(INVENTORY_URL))
-    for host in hosts:
-        if host in HOSTS:
-            hosts.remove(host)
-            hosts += HOSTS[host]
-    # remove duplicates
-    hosts = set(hosts)
+    hosts = parse_hosts(sys.argv[2:])
 
     processes = []
     for host in hosts:
