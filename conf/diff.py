@@ -61,7 +61,8 @@ def main():
         if verify == reply:
             print host, "matched"
         else:
-            for line in unified_diff(verify, reply, fromfile='verify', tofile=host):
+            for line in unified_diff(verify, reply,
+                fromfile=sys.argv[1], tofile=host, lineterm=''):
                 print line
 
 
