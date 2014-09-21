@@ -125,19 +125,15 @@ def main():
 
         unchanged = 0
         routes_to_add = set(encap_routes)
-        routes_to_remove = list(ros_routes)
-        ipips_to_remove = list(ros_ipips)
+        routes_to_remove = set(ros_routes)
+        ipips_to_remove = set(ros_ipips)
         for (dstaddress, gateway) in encap_routes:
             interface = "ampr-%s" % gateway
             if (dstaddress, interface) in ros_routes and \
                (interface, gateway) in ros_ipips:
-                routes_to_add.remove((dstaddress, gateway))
-                routes_to_remove.remove((dstaddress, interface))
-                try:
-                    ipips_to_remove.remove((interface, gateway))
-                except ValueError:
-                    # ignore multiple routes per interface
-                    pass
+                routes_to_add.discard((dstaddress, gateway))
+                routes_to_remove.discard((dstaddress, interface))
+                ipips_to_remove.discard((interface, gateway))
                 unchanged += 1
 
         commands = []
