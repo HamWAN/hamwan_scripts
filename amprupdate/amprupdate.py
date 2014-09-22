@@ -25,7 +25,7 @@ ssh_port = 22
 username = None
 
 # blacklist our network
-hamwan_dstaddresses = ["44.24.240.0/20", ]
+hamwan_dstaddresses = ["44.24.240.0/20", "44.103.0.0/19", "44.34.128.0/21"]
 hamwan_gateways = ["198.178.136.80", "209.189.196.68"]
 
 
