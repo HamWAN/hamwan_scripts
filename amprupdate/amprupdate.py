@@ -152,7 +152,7 @@ def main():
         if routes_to_add:
             commands.append("# adding new and modified routes")
         for dstaddress, interface in routes_to_add:
-            commands.append("/interface ipip add local-address=%s name=ampr-%s remote-address=%s" % (edge_router_ip, interface, interface))
+            commands.append("/interface ipip add !keepalive clamp-tcp-mss=yes local-address=%s name=ampr-%s remote-address=%s" % (edge_router_ip, interface, interface))
             commands.append("/ip route add dst-address=%s gateway=ampr-%s distance=30" % (dstaddress, interface))
             commands.append("/ip neighbor discovery set ampr-%s discover=no" % (interface))
 
