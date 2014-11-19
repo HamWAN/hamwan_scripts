@@ -7,7 +7,9 @@ new, removed, or changed routes from the encap.
 Usage
 -----
 
-	cat encap.txt | ./amprupdate.py [-v] [-n] TARGET_IP
+	cat encap.txt | ./amprupdate.py [-v] [-n] [-f] TARGET_IP
+
+`-f` force. Continue even when sanity check fails.
 
 `-n` dry-run. No changes will be made to target router.
 

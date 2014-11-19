@@ -139,6 +139,10 @@ def main():
         commands = []
         commands.append("# %d routes unchanged" % unchanged)
 
+        if len(routes_to_remove) > len(routes_to_add) + 100 and "-f" not in sys.argv:
+            raise UserWarning("Sanity check failed: removing too many routes (-%d +%d)" % (
+                len(routes_to_remove), len(routes_to_add)))
+
         if routes_to_remove:
             commands.append("# removing old or modified routes")
         for route in routes_to_remove:
@@ -162,6 +166,8 @@ def main():
             for command in commands:
                 ssh.exec_command(command)
                 time.sleep(0.1)
+    except UserWarning, e:
+        print e
     except socket.timeout:
         print "timeout"
     finally:
