@@ -1,3 +1,14 @@
+Deprecated
+==========
+
+This script parses the AMPR encap file to generate routes. With the release of
+the AMPR API, this is no longer necessary. A new version of this script that
+utilizes the AMPR API is available at
+https://github.com/kd7lxl/python-amprapi/.
+Maintenance efforts will be focused on the new
+[python-amprapi](https://github.com/kd7lxl/python-amprapi).
+
+
 amprupdate.py
 =============
 
