@@ -1,0 +1,8 @@
+#!/bin/bash
+for key in *.key
+do
+  read -a FIELD < $key
+  USERNAME=$(basename -s .key $key)
+  echo "set system login user $USERNAME authentication public-keys ${FIELD[2]} key '${FIELD[1]}'"
+  echo "set system login user $USERNAME authentication public-keys ${FIELD[2]} type '${FIELD[0]}'"
+done
