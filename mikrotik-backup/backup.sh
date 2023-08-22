@@ -2,7 +2,7 @@
 # usage:
 # ./hamwan_routers.sh | ./backup.sh
 
-DIR=/srv/router-backup
+DIR=${DIR:-/srv/router-backup}
 LIMIT=8
 COMMON_OPTS="-o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no -i /var/www/.ssh/id_rsa -o User=monitoring"
 SCP_OPTS="$COMMON_OPTS -P 222"
