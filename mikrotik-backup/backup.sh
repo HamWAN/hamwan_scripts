@@ -2,11 +2,11 @@
 # usage:
 # ./hamwan_routers.sh | ./backup.sh
 
-DIR=$(dirname "${BASH_SOURCE[0]}")/backup
+DIR=/srv/router-backup
 LIMIT=8
-COMMON_OPTS="-o ConnectTimeout=10 -o BatchMode=yes"
-SCP_OPTS="$COMMON_OPTS"
-SSH_OPTS="$COMMON_OPTS -n"
+COMMON_OPTS="-o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no -i /var/www/.ssh/id_rsa -o User=monitoring"
+SCP_OPTS="$COMMON_OPTS -P 222"
+SSH_OPTS="$COMMON_OPTS -n -p 222"
 
 write_if_not_empty () {
 	head=$(dd bs=1 count=1 2>/dev/null; echo a)
@@ -24,12 +24,12 @@ do
 	echo Backing up "$router"... 1>&2
 	SSH_CMD="ssh ${SSH_OPTS} $router"
 
-	$SSH_CMD '/export hide-sensitive' \
-	| sed 's![a-z]*/[0-3][0-9]/20[0-9][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]!mm/dd/yyyy hh:mm:ss!' \
-	| write_if_not_empty "$router" &
+	# ROS6 and ROS7 have a different date output.  Need to accept either here.
+	# Old pattern: 's![a-z]*/[0-3][0-9]/20[0-9][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]!mm/dd/yyyy hh:mm:ss!'
 
-	$SSH_CMD "/system backup save name=$router " \
-	&& scp ${SCP_OPTS} "$router":"$router".backup . &
+	$SSH_CMD '/export hide-sensitive' \
+	| sed 's![0-9a-z/-][0-9a-z/-]* [0-2][0-9]:[0-5][0-9]:[0-5][0-9]!mm/dd/yyyy hh:mm:ss!' \
+	| write_if_not_empty "$router" &
 
 	# only allow $LIMIT concurrent jobs
 	until [ $(jobs -p | wc -l) -lt $LIMIT ]
