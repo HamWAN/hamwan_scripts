@@ -5,8 +5,8 @@
 DIR=${DIR:-/srv/router-backup}
 LIMIT=8
 COMMON_OPTS="-o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no -i /var/www/.ssh/id_rsa -o User=monitoring"
-SCP_OPTS="$COMMON_OPTS -P 222"
-SSH_OPTS="$COMMON_OPTS -n -p 222"
+SCP_OPTS="$COMMON_OPTS"
+SSH_OPTS="$COMMON_OPTS -n"
 
 write_if_not_empty () {
 	head=$(dd bs=1 count=1 2>/dev/null; echo a)
