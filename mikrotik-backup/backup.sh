@@ -22,7 +22,13 @@ cd "$DIR"
 while read router
 do
 	echo Backing up "$router"... 1>&2
-	SSH_CMD="ssh ${SSH_OPTS} $router"
+	host "lo-mgmt.$router" > /dev/null 2>&1
+        if [ $? = 0 ]; then
+		SSH_CMD="ssh ${SSH_OPTS} lo-mgmt.$router"
+		echo Using management interface "$router"... 1>&2
+	else
+		SSH_CMD="ssh ${SSH_OPTS} $router"
+	fi
 
 	# ROS6 and ROS7 have a different datestamp on export output.  Need to accept both.
 	# ROS6 pattern: mmm/dd/yyyy hh:mm:ss
